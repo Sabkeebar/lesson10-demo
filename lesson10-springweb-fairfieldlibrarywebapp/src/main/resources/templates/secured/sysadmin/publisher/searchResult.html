@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fairfield Library System - System Administration - Publishers</title>
+</head>
+<body>
+  <header th:replace="fragments/header :: header"></header>
+  <main>
+    <h1>System Administration</h1>
+    <nav>
+      <a href="/fairfieldlibrary/sysadmin/publisher/list">Manage Publishers</a> |
+      <a href="#">Manage Books</a> |
+      <a href="#">Manage Library Members</a>
+    </nav>
+    <h2 style="background-color: aqua;">Publishers search result for '[[${searchString}]]'</h2>
+    <section>
+      <form action="/fairfieldlibrary/sysadmin/publisher/search" method="get">
+        <fieldset>
+          <legend style="font-weight: bolder;">Search for Publisher(s)</legend>
+          <label>
+            You may search by Publisher's Name or any part of the Address data.
+          </label>
+          <div>
+            <input type="search" name="searchString" id="searchString" style="width: 35%; height: 4em;"
+              th:value="${searchString}" placeholder="Enter some text to search for Publisher" 
+              autofocus>
+            <button type="submit" style="height: 4em; width: 7em;">Search</button>
+          </div>
+        </fieldset>
+      </form>
+    </section>
+    <section style="margin-top: 1em;">
+      <table border="1" cellpadding="20" cellspacing="0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Publisher Name</th>
+            <th>Primary Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="publisher, counter : ${publishers}">
+            <th th:text="${counter.count}"></th>
+            <td th:text="${publisher.name}"></td>
+            <td th:if="${publisher.primaryAddress != null}">
+              <p>
+                <span th:text="${publisher.primaryAddress.street}"></span><br>
+                <span th:text="${publisher.primaryAddress.city}+ ', ' + ${publisher.primaryAddress.state}+' '+${publisher.primaryAddress.zipCode}"></span><br>
+              </p>
+            </td>
+          </tr>
+          <tr th:if="${publishers.isEmpty()}">
+            <td colspan="3" th:align="center">No Publishers found</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section style="margin-top: 1em;">
+      <!-- Pagination -->
+      <!-- <table border="1" cellspacing="3" cellpadding="5">
+        <tbody>
+          <tr>
+            <th scope="row">Pages:</th>
+            <td th:each="pageCount : ${#numbers.sequence(1, publishers.totalPages)}">
+              <a th:if="${currentPageNo == pageCount-1}" th:href="@{/fairfieldlibrary/sysadmin/publisher/list(pageNo=${pageCount-1})}"
+                th:text="${pageCount}" style="padding: 100%; background-color:aqua;"></a>
+              <a th:if="${currentPageNo != pageCount-1}" th:href="@{/fairfieldlibrary/sysadmin/publisher/list(pageNo=${pageCount-1})}"
+                th:text="${pageCount}"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table> -->
+    </section>
+  </main>
+</body>
+</html>

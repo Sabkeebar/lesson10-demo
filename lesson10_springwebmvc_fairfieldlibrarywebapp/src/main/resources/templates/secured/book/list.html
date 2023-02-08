@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head th:replace="public/fragments/head-elements :: headElements"></head>
+    <title>Fairfield Library system - Books</title>
+</head>
+<body>
+    <div th:replace="public/fragments/header :: header"></div>
+    <div id="mainContainer" class="container">
+        <div style="width: 100%;">
+            <h3 style="display: inline;">Books in our collection</h3>
+            <span style="float: right;">
+                    <!-- <a class="btn btn-outline-primary btn-lg" href="/fairfieldlibrary/book/new"> -->
+                        <a class="btn btn-outline-primary btn-lg" href="#">
+                        <i class="fa-solid fa-book"></i> Add a New Book
+                    </a>
+                </span>
+        </div>
+        <hr/>
+        <div style="font-size: 1em">
+            <!-- table with publishers-->
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">Book title</th>
+                    <th scope="col">Publisher</th>
+                    <th scope="col">Date Published</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Copies in stock</th>
+                    <th scope="col">&nbsp;</th>
+                    <th scope="col">&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book,iterStat : ${books}">
+                    <!--th:onclick="@{document.location='/elibrary/book/edit/{bookId}'(bookId=${book.bookId})}" -->
+                    <th scope="row" th:text="${iterStat.count}+${'.'}"></th>
+                    <td th:text="${book.isbn}"></td>
+                    <td th:text="${book.title}"></td>
+                    <td th:if="${book.publisher != null}" th:text="${book.publisher.name}"></td>
+                    <td th:if="${book.publisher == null}" th:text="${''}"></td>
+                    <td th:text="${book.datePublished}"></td>
+                    <td th:if="${book.price != null}" th:text="${book.price.priceAmount}"></td>
+                    <td th:if="${book.price == null}" th:text="${''}"></td>
+                    <td th:text="${book.numberOfCopiesInStock}"></td>
+                    <td>
+                        <a th:href="@{'/fairfieldlibrary/book/edit/{bookId}'(bookId=${book.bookId})}">
+                            <i class="fa-regular fa-pen-to-square"></i> Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{'/fairfieldlibrary/book/delete/{bookId}'(bookId=${book.bookId})}">
+                            <i class="fa-solid fa-delete-left"></i> Delete
+                        </a>
+                        <!--                        <a data-toggle="modal" data-target="#confirmDeleteBookModal" th:href="@{'/elibrary/book/delete/' + ${book.bookId}}">Delete</a>-->
+                        <!--                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">-->
+                        <!--                            Launch demo modal-->
+                        <!--                        </button>-->
+                    </td>
+                </tr>
+                <tr th:if="${books.size() < 1}">
+                    <td colspan="8" th:align="center">No books found</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:replace="public/fragments/footer :: footer"></div>
+</body>
+</html>
